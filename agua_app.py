@@ -43,8 +43,25 @@ section[data-testid="stSidebar"] * {
     color: #cbd5e1 !important;
 }
 
-/* Ocultar elementos de Streamlit */
-#MainMenu, footer, header { visibility: hidden; }
+/* Ocultar elementos de Streamlit — mantenemos header para el botón del sidebar */
+#MainMenu, footer { visibility: hidden; }
+header { visibility: visible; background: transparent !important; }
+header [data-testid="stHeader"] { background: transparent; }
+
+/* Botón de colapsar/expandir sidebar — siempre visible */
+button[kind="header"],
+[data-testid="collapsedControl"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #38bdf8 !important;
+    background: #0f1a2e !important;
+    border: 1px solid #1e3a5f !important;
+    border-radius: 6px !important;
+}
+[data-testid="collapsedControl"]:hover {
+    background: #1e3a5f !important;
+}
 
 /* Tarjetas de métricas */
 .metric-card {
@@ -267,17 +284,17 @@ if pagina == "Predicción":
     </div>
     """, unsafe_allow_html=True)
 
-    # Rangos típicos del dataset para los sliders
+    # Rangos del dataset — límites según notebook (descripción de variables)
     VARIABLES = {
-        "ph":              {"label": "pH",                    "min": 0.0,   "max": 14.0,  "default": 7.0,   "step": 0.1,  "desc": "Acidez o alcalinidad. Rango seguro: 6.5 – 8.5"},
-        "Hardness":        {"label": "Dureza (mg/L)",         "min": 47.0,  "max": 323.0, "default": 180.0, "step": 1.0,  "desc": "Calcio y magnesio disueltos"},
-        "Solids":          {"label": "Sólidos disueltos (mg/L)","min":320.0,"max":61000.0,"default":20000.0,"step":100.0, "desc": "Total de sólidos disueltos (TDS)"},
-        "Chloramines":     {"label": "Cloraminas (mg/L)",     "min": 0.35,  "max": 13.0,  "default": 7.0,   "step": 0.1,  "desc": "Desinfectante. Nivel seguro: < 4 mg/L"},
-        "Sulfate":         {"label": "Sulfato (mg/L)",        "min": 129.0, "max": 481.0, "default": 330.0, "step": 1.0,  "desc": "Sulfatos disueltos"},
-        "Conductivity":    {"label": "Conductividad (μS/cm)", "min": 181.0, "max": 753.0, "default": 420.0, "step": 1.0,  "desc": "Indicador indirecto de iones disueltos"},
-        "Organic_carbon":  {"label": "Carbono orgánico (mg/L)","min": 2.0,  "max": 28.0,  "default": 14.0,  "step": 0.1,  "desc": "Materia orgánica presente"},
-        "Trihalomethanes": {"label": "Trihalometanos (μg/L)", "min": 0.74,  "max": 124.0, "default": 66.0,  "step": 0.5,  "desc": "Subproductos de desinfección. Límite OMS: 300 μg/L"},
-        "Turbidity":       {"label": "Turbidez (NTU)",        "min": 1.45,  "max": 6.50,  "default": 3.9,   "step": 0.05, "desc": "Claridad del agua. Límite OMS: < 5 NTU"},
+        "ph":              {"label": "pH",                      "min": 0.0,   "max": 14.0,   "default": 7.0,   "step": 0.1,  "desc": "Acidez o alcalinidad del agua.",              "limite": "Rango aceptado: 6.5 – 8.5"},
+        "Hardness":        {"label": "Dureza (mg/L)",           "min": 47.0,  "max": 323.0,  "default": 180.0, "step": 1.0,  "desc": "Calcio y magnesio disueltos.",                "limite": "Máximo permitido: 400 mg/L"},
+        "Solids":          {"label": "Sólidos disueltos (mg/L)","min": 320.0, "max": 61000.0,"default":20000.0,"step":100.0, "desc": "Total de sólidos disueltos (TDS).",           "limite": "Máximo permitido: 1500 mg/L"},
+        "Chloramines":     {"label": "Cloraminas (mg/L)",       "min": 0.35,  "max": 13.0,   "default": 7.0,   "step": 0.1,  "desc": "Compuesto desinfectante del agua.",           "limite": "Máximo permitido: 2 mg/L"},
+        "Sulfate":         {"label": "Sulfato (mg/L)",          "min": 129.0, "max": 481.0,  "default": 330.0, "step": 1.0,  "desc": "Sulfatos disueltos en el agua.",              "limite": "Máximo permitido: 400 mg/L"},
+        "Conductivity":    {"label": "Conductividad (μS/cm)",   "min": 181.0, "max": 753.0,  "default": 420.0, "step": 1.0,  "desc": "Indicador indirecto de iones disueltos.",     "limite": "Rango aceptado: 200 – 800 μS/cm"},
+        "Organic_carbon":  {"label": "Carbono orgánico (mg/L)", "min": 2.0,   "max": 28.0,   "default": 14.0,  "step": 0.1,  "desc": "Materia orgánica presente en el agua.",      "limite": "Máximo permitido: 2 mg/L"},
+        "Trihalomethanes": {"label": "Trihalometanos (μg/L)",   "min": 0.74,  "max": 124.0,  "default": 66.0,  "step": 0.5,  "desc": "Subproductos de la reacción cloro–materia orgánica.", "limite": "Máximo permitido: 100 μg/L"},
+        "Turbidity":       {"label": "Turbidez (NTU)",          "min": 1.45,  "max": 6.50,   "default": 3.9,   "step": 0.05, "desc": "Claridad del agua — partículas suspendidas.", "limite": "Máximo permitido: 3 NTU"},
     }
 
     col_form, col_result = st.columns([1, 1], gap="large")
@@ -365,10 +382,34 @@ if pagina == "Predicción":
         # Referencia de variables
         st.markdown("<br><div class='section-header'>Referencia de variables</div>", unsafe_allow_html=True)
         for key, meta in VARIABLES.items():
+            val_actual = valores[key]
+            # Determinar si el valor actual supera el límite (solo para máximos)
+            en_rango = True
+            limite_txt = meta['limite']
+            if "Máximo" in limite_txt:
+                try:
+                    lim_val = float(limite_txt.split(":")[1].strip().split(" ")[0])
+                    en_rango = val_actual <= lim_val
+                except Exception:
+                    pass
+            elif "Rango" in limite_txt:
+                try:
+                    partes = limite_txt.split(":")[1].strip().split("–")
+                    lim_min = float(partes[0].strip().split(" ")[0])
+                    lim_max = float(partes[1].strip().split(" ")[0])
+                    en_rango = lim_min <= val_actual <= lim_max
+                except Exception:
+                    pass
+
+            color_limite = "#34d399" if en_rango else "#f87171"
+            icono_limite = "✓" if en_rango else "✗"
             st.markdown(f"""
             <div class='var-card'>
                 <div class='var-name'>{meta['label']}</div>
                 <div class='var-desc'>{meta['desc']}</div>
+                <div style='font-size:11px; margin-top:5px; color:{color_limite}; font-weight:600;'>
+                    {icono_limite} {limite_txt}
+                </div>
             </div>
             """, unsafe_allow_html=True)
 
