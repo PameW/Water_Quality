@@ -11,6 +11,7 @@ from sklearn.metrics import (
     precision_score, recall_score, f1_score, accuracy_score
 )
 from sklearn.model_selection import train_test_split
+import matplotlib.patheffects as path_effects
 
 # ── Configuración de página ────────────────────────────────────────────────────
 st.set_page_config(
@@ -757,7 +758,12 @@ elif pagina == "Rendimiento del modelo":
         style_fig(fig, ax)
         sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax,
                     linewidths=0.5, linecolor=BORDER,
-                    annot_kws={"size": 16, "weight": "bold", "color": "#ffffff", "path_effects": [plt.matplotlib.patheffects.withStroke(linewidth=2, foreground="black")]},
+                    annot_kws={
+                        "size": 16, 
+                        "weight": "bold", 
+                        "color": "#ffffff", 
+                        "path_effects": [path_effects.withStroke(linewidth=2, foreground="black")]
+                    },
                     cbar=False)
         ax.set_xlabel("Predicción", color=TEXT_MUTED, fontsize=11)
         ax.set_ylabel("Valor real", color=TEXT_MUTED, fontsize=11)
