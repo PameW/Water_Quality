@@ -184,6 +184,137 @@ button[kind="header"],
     padding: 12px 16px;
     margin-bottom: 10px;
 }
+
+/* ── HOME PAGE ── */
+
+/* Header con logo y firma */
+.home-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 32px 20px 32px;
+    border-bottom: 1px solid #1e3a5f;
+    margin-bottom: 40px;
+    background: linear-gradient(180deg, #0d1b33 0%, transparent 100%);
+    border-radius: 12px 12px 0 0;
+}
+
+/* Hero section */
+.home-hero {
+    text-align: center;
+    padding: 20px 40px 36px 40px;
+}
+.home-tag {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #38bdf8;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+.home-title {
+    font-size: 34px;
+    font-weight: 700;
+    color: #f1f5f9;
+    line-height: 1.25;
+    max-width: 720px;
+    margin: 0 auto 14px auto;
+}
+.home-subtitle {
+    font-size: 16px;
+    color: #64748b;
+    max-width: 580px;
+    margin: 0 auto;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+/* Info cards grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 40px 0;
+}
+.info-card {
+    background: linear-gradient(135deg, #0f1f3d 0%, #0a1628 100%);
+    border: 1px solid #1e3a5f;
+    border-radius: 14px;
+    padding: 22px 20px;
+}
+.info-card-icon {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+.info-card-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #38bdf8;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #1e3a5f;
+}
+.info-card-item {
+    font-size: 13px;
+    color: #94a3b8;
+    padding: 4px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    line-height: 1.5;
+}
+.info-card-item::before {
+    content: "·";
+    color: #38bdf8;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* Sección cards navegación */
+.nav-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 8px;
+}
+.nav-card {
+    background: linear-gradient(135deg, #0f1f3d 0%, #091526 100%);
+    border: 1px solid #1e3a5f;
+    border-radius: 14px;
+    padding: 28px 24px 24px 24px;
+    transition: border-color 0.2s, transform 0.2s;
+}
+.nav-card:hover {
+    border-color: #38bdf8;
+}
+.nav-card-icon  { font-size: 28px; margin-bottom: 10px; }
+.nav-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 8px;
+}
+.nav-card-desc  { font-size: 13px; color: #64748b; line-height: 1.55; margin-bottom: 18px; }
+
+/* Botón de navegación */
+div[data-testid="stButton"] > button {
+    background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    padding: 8px 20px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    transition: opacity 0.2s !important;
+}
+div[data-testid="stButton"] > button:hover {
+    opacity: 0.88 !important;
+}
+}
 .var-name {
     font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
@@ -247,15 +378,47 @@ try:
 except FileNotFoundError:
     MODEL_LOADED = False
 
+# ── Imágenes embebidas ────────────────────────────────────────────────────────
+import base64, os
+
+def img_to_b64(path):
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    return ""
+
+firma_b64 = img_to_b64("Firma.png")
+logo_b64  = img_to_b64("Logo.png")
+
+# ── Estado de navegación ──────────────────────────────────────────────────────
+if "pagina" not in st.session_state:
+    st.session_state.pagina = "Home"
+
 # ── Sidebar ────────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("### 💧 Calidad del Agua")
+    # Logo en sidebar
+    if logo_b64:
+        st.markdown(f"""
+        <div style='text-align:center; padding: 8px 0 4px 0;'>
+            <img src='data:image/png;base64,{logo_b64}' style='width:90%; border-radius:8px;'/>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("### 💧 Calidad del Agua")
     st.markdown("---")
-    pagina = st.radio(
+
+    opciones = ["🏠  Home", "🔬  Predicción", "📊  Rendimiento del modelo", "🗂️  Exploración de datos"]
+    labels   = ["Home", "Predicción", "Rendimiento del modelo", "Exploración de datos"]
+
+    seleccion = st.radio(
         "Navegación",
-        ["Predicción", "Rendimiento del modelo", "Exploración de datos"],
+        opciones,
+        index=labels.index(st.session_state.pagina) if st.session_state.pagina in labels else 0,
         label_visibility="collapsed"
     )
+    pagina = labels[opciones.index(seleccion)]
+    st.session_state.pagina = pagina
+
     st.markdown("---")
     st.markdown("""
     <div style='font-size:12px; color:#475569; line-height:1.7'>
@@ -272,9 +435,144 @@ if not MODEL_LOADED:
     st.stop()
 
 # ══════════════════════════════════════════════════════════════════════════════
+# PÁGINA 0 — HOME
+# ══════════════════════════════════════════════════════════════════════════════
+if pagina == "Home":
+
+    # ── Header: Logo + Firma ──────────────────────────────────────────────────
+    col_logo, col_firma = st.columns([1.6, 1], gap="large")
+
+    with col_logo:
+        if logo_b64:
+            st.markdown(f"""
+            <div style='padding: 16px 0 8px 0;'>
+                <img src='data:image/png;base64,{logo_b64}'
+                     style='max-width:420px; width:100%; border-radius:10px;'/>
+            </div>
+            """, unsafe_allow_html=True)
+
+    with col_firma:
+        if firma_b64:
+            st.markdown(f"""
+            <div style='padding: 16px 0 8px 0; text-align:right;'>
+                <img src='data:image/png;base64,{firma_b64}'
+                     style='max-width:280px; width:100%; border-radius:10px;'/>
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.markdown("<hr style='border:none; border-top:1px solid #1e3a5f; margin: 8px 0 36px 0;'>", unsafe_allow_html=True)
+
+    # ── Hero ──────────────────────────────────────────────────────────────────
+    st.markdown("""
+    <div class='home-hero'>
+        <div class='home-tag'>Machine Learning · Water Quality</div>
+        <div class='home-title'>Predicción de la Potabilidad del Agua usando Machine Learning</div>
+        <div class='home-subtitle'>
+            "Evaluar la calidad del agua utilizando parámetros fisicoquímicos
+            y un modelo optimizado de Random Forest."
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── Info cards ────────────────────────────────────────────────────────────
+    st.markdown("""
+    <div class='info-grid'>
+
+        <div class='info-card'>
+            <div class='info-card-icon'>🗄️</div>
+            <div class='info-card-title'>Dataset</div>
+            <div class='info-card-item'>3,276 water samples</div>
+            <div class='info-card-item'>9 physicochemical features</div>
+        </div>
+
+        <div class='info-card'>
+            <div class='info-card-icon'>🤖</div>
+            <div class='info-card-title'>Model</div>
+            <div class='info-card-item'>Random Forest (Optimized)</div>
+            <div class='info-card-item'>GridSearchCV</div>
+            <div class='info-card-item'>Threshold Optimization</div>
+        </div>
+
+        <div class='info-card'>
+            <div class='info-card-icon'>📈</div>
+            <div class='info-card-title'>Performance</div>
+            <div class='info-card-item'>Accuracy: 0.60</div>
+            <div class='info-card-item'>Recall: 0.63</div>
+            <div class='info-card-item'>ROC-AUC: 0.67</div>
+        </div>
+
+        <div class='info-card'>
+            <div class='info-card-icon'>🔬</div>
+            <div class='info-card-title'>Features Analyzed</div>
+            <div class='info-card-item'>pH</div>
+            <div class='info-card-item'>Hardness</div>
+            <div class='info-card-item'>Sulfate</div>
+            <div class='info-card-item'>Chloramines</div>
+            <div class='info-card-item'>Solids</div>
+            <div class='info-card-item'>Conductivity</div>
+            <div class='info-card-item'>Organic Carbon</div>
+            <div class='info-card-item'>Trihalomethanes</div>
+            <div class='info-card-item'>Turbidity</div>
+        </div>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── Secciones con botones ─────────────────────────────────────────────────
+    st.markdown("<div class='section-header'>Secciones</div>", unsafe_allow_html=True)
+
+    c1, c2, c3 = st.columns(3, gap="large")
+
+    with c1:
+        st.markdown("""
+        <div class='nav-card'>
+            <div class='nav-card-icon'>🔬</div>
+            <div class='nav-card-title'>Prediction</div>
+            <div class='nav-card-desc'>
+                Ingresá los parámetros fisicoquímicos de una muestra y obtené
+                una predicción de potabilidad con probabilidad y gauge visual.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Ir a Predicción", key="btn_pred"):
+            st.session_state.pagina = "Predicción"
+            st.rerun()
+
+    with c2:
+        st.markdown("""
+        <div class='nav-card'>
+            <div class='nav-card-icon'>📊</div>
+            <div class='nav-card-title'>Model Performance</div>
+            <div class='nav-card-desc'>
+                Explorá las métricas del modelo: matriz de confusión, curva ROC,
+                importancia de variables y comparativa de umbrales de decisión.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Ir a Rendimiento del modelo", key="btn_model"):
+            st.session_state.pagina = "Rendimiento del modelo"
+            st.rerun()
+
+    with c3:
+        st.markdown("""
+        <div class='nav-card'>
+            <div class='nav-card-icon'>🗂️</div>
+            <div class='nav-card-title'>Data Exploration</div>
+            <div class='nav-card-desc'>
+                Analizá el dataset original: distribuciones por clase, valores
+                faltantes, mapa de correlación y estadísticas descriptivas.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Ir a Exploración de datos", key="btn_data"):
+            st.session_state.pagina = "Exploración de datos"
+            st.rerun()
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # PÁGINA 1 — PREDICCIÓN
 # ══════════════════════════════════════════════════════════════════════════════
-if pagina == "Predicción":
+elif pagina == "Predicción":
 
     st.markdown("""
     <div class='hero'>
