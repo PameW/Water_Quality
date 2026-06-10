@@ -1,4 +1,5 @@
-import streamlit as st
+﻿import streamlit as st
+import textwrap
 import joblib
 import pandas as pd
 import numpy as np
@@ -20,7 +21,7 @@ st.set_page_config(
 )
 
 # ── Estilos ────────────────────────────────────────────────────────────────────
-st.markdown("""
+st.markdown(textwrap.dedent("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -326,7 +327,7 @@ div[data-testid="stButton"] > button:hover {
     margin-top: 2px;
 }
 </style>
-""", unsafe_allow_html=True)
+""").strip(), unsafe_allow_html=True)
 
 # ── Colores para matplotlib ────────────────────────────────────────────────────
 DARK_BG   = "#0b1120"
@@ -397,11 +398,11 @@ if "pagina" not in st.session_state:
 with st.sidebar:
     # Logo en sidebar
     if logo_b64:
-        st.markdown(f"""
+        st.markdown(textwrap.dedent(f"""
         <div style='text-align:center; padding: 8px 0 4px 0;'>
             <img src='data:image/png;base64,{logo_b64}' style='width:90%; border-radius:8px;'/>
         </div>
-        """, unsafe_allow_html=True)
+        """).strip(), unsafe_allow_html=True)
     else:
         st.markdown("### 💧 Calidad del Agua")
     st.markdown("---")
@@ -419,14 +420,14 @@ with st.sidebar:
     st.session_state.pagina = pagina
 
     st.markdown("---")
-    st.markdown("""
+    st.markdown(textwrap.dedent("""
     <div style='font-size:12px; color:#475569; line-height:1.7'>
     <b style='color:#64748b'>Modelo</b><br>Random Forest<br><br>
     <b style='color:#64748b'>Dataset</b><br>Water Potability<br>3.276 muestras<br><br>
     <b style='color:#64748b'>Variables</b><br>9 parámetros fisicoquímicos<br><br>
     <b style='color:#64748b'>Proyecto</b><br>Machine Learning · Python
     </div>
-    """, unsafe_allow_html=True)
+    """).strip(), unsafe_allow_html=True)
 
 # ── Aviso si falta el modelo ───────────────────────────────────────────────────
 if not MODEL_LOADED:
@@ -443,26 +444,26 @@ if pagina == "Home":
 
     with col_logo:
         if logo_b64:
-            st.markdown(f"""
+            st.markdown(textwrap.dedent(f"""
             <div style='padding: 16px 0 8px 0;'>
                 <img src='data:image/png;base64,{logo_b64}'
                      style='max-width:420px; width:100%; border-radius:10px;'/>
             </div>
-            """, unsafe_allow_html=True)
+            """).strip(), unsafe_allow_html=True)
 
     with col_firma:
         if firma_b64:
-            st.markdown(f"""
+            st.markdown(textwrap.dedent(f"""
             <div style='padding: 16px 0 8px 0; text-align:right;'>
                 <img src='data:image/png;base64,{firma_b64}'
                      style='max-width:280px; width:100%; border-radius:10px;'/>
             </div>
-            """, unsafe_allow_html=True)
+            """).strip(), unsafe_allow_html=True)
 
     st.markdown("<hr style='border:none; border-top:1px solid #1e3a5f; margin: 8px 0 36px 0;'>", unsafe_allow_html=True)
 
     # ── Hero ──────────────────────────────────────────────────────────────────
-    st.markdown("""
+    st.markdown(textwrap.dedent("""
     <div class='home-hero'>
         <div class='home-tag'>Machine Learning · Water Quality</div>
         <div class='home-title'>Predicción de la Potabilidad del Agua usando Machine Learning</div>
@@ -471,10 +472,10 @@ if pagina == "Home":
             y un modelo optimizado de Random Forest."
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """).strip(), unsafe_allow_html=True)
 
     # ── Info cards ────────────────────────────────────────────────────────────
-    st.markdown("""
+    st.markdown(textwrap.dedent("""
     <div class='info-grid'>
 
         <div class='info-card'>
@@ -515,7 +516,7 @@ if pagina == "Home":
         </div>
 
     </div>
-    """, unsafe_allow_html=True)
+    """).strip(), unsafe_allow_html=True)
 
     # ── Secciones con botones ─────────────────────────────────────────────────
     st.markdown("<div class='section-header'>Secciones</div>", unsafe_allow_html=True)
@@ -523,7 +524,7 @@ if pagina == "Home":
     c1, c2, c3 = st.columns(3, gap="large")
 
     with c1:
-        st.markdown("""
+        st.markdown(textwrap.dedent("""
         <div class='nav-card'>
             <div class='nav-card-icon'>🔬</div>
             <div class='nav-card-title'>Prediction</div>
@@ -532,13 +533,13 @@ if pagina == "Home":
                 una predicción de potabilidad con probabilidad y gauge visual.
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """).strip(), unsafe_allow_html=True)
         if st.button("Ir a Predicción", key="btn_pred"):
             st.session_state.pagina = "Predicción"
             st.rerun()
 
     with c2:
-        st.markdown("""
+        st.markdown(textwrap.dedent("""
         <div class='nav-card'>
             <div class='nav-card-icon'>📊</div>
             <div class='nav-card-title'>Model Performance</div>
@@ -547,13 +548,13 @@ if pagina == "Home":
                 importancia de variables y comparativa de umbrales de decisión.
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """).strip(), unsafe_allow_html=True)
         if st.button("Ir a Rendimiento del modelo", key="btn_model"):
             st.session_state.pagina = "Rendimiento del modelo"
             st.rerun()
 
     with c3:
-        st.markdown("""
+        st.markdown(textwrap.dedent("""
         <div class='nav-card'>
             <div class='nav-card-icon'>🗂️</div>
             <div class='nav-card-title'>Data Exploration</div>
@@ -562,7 +563,7 @@ if pagina == "Home":
                 faltantes, mapa de correlación y estadísticas descriptivas.
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """).strip(), unsafe_allow_html=True)
         if st.button("Ir a Exploración de datos", key="btn_data"):
             st.session_state.pagina = "Exploración de datos"
             st.rerun()
@@ -573,13 +574,13 @@ if pagina == "Home":
 # ══════════════════════════════════════════════════════════════════════════════
 elif pagina == "Predicción":
 
-    st.markdown("""
+    st.markdown(textwrap.dedent("""
     <div class='hero'>
         <div class='hero-tag'>Clasificación de potabilidad</div>
         <div class='hero-title'>¿Es segura esta muestra de agua?</div>
         <div class='hero-sub'>Ingresá los parámetros fisicoquímicos para obtener una predicción.</div>
     </div>
-    """, unsafe_allow_html=True)
+    """).strip(), unsafe_allow_html=True)
 
     # Rangos del dataset — límites según notebook (descripción de variables)
     VARIABLES = {
@@ -631,7 +632,7 @@ elif pagina == "Predicción":
 
         bar_width = int(prob * 100)
 
-        st.markdown(f"""
+        st.markdown(textwrap.dedent(f"""
         <div class='{card_class}'>
             <div class='result-title'>{icono} {titulo}</div>
             <div class='result-subtitle'>{mensaje}</div>
@@ -645,7 +646,7 @@ elif pagina == "Predicción":
                 probabilidad de potabilidad · umbral 0.42
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """).strip(), unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
 
@@ -700,7 +701,7 @@ elif pagina == "Predicción":
 
             color_limite = "#34d399" if en_rango else "#f87171"
             icono_limite = "✓" if en_rango else "✗"
-            st.markdown(f"""
+            st.markdown(textwrap.dedent(f"""
             <div class='var-card'>
                 <div class='var-name'>{meta['label']}</div>
                 <div class='var-desc'>{meta['desc']}</div>
@@ -708,7 +709,7 @@ elif pagina == "Predicción":
                     {icono_limite} {limite_txt}
                 </div>
             </div>
-            """, unsafe_allow_html=True)
+            """).strip(), unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -716,13 +717,13 @@ elif pagina == "Predicción":
 # ══════════════════════════════════════════════════════════════════════════════
 elif pagina == "Rendimiento del modelo":
 
-    st.markdown("""
+    st.markdown(textwrap.dedent("""
     <div class='hero'>
         <div class='hero-tag'>Evaluación del modelo</div>
         <div class='hero-title'>Rendimiento de Random Forest</div>
         <div class='hero-sub'>Métricas, curvas y análisis de variables sobre el conjunto de prueba.</div>
     </div>
-    """, unsafe_allow_html=True)
+    """).strip(), unsafe_allow_html=True)
 
     X_test, y_test = get_test_split()
     y_pred  = modelo.predict(X_test)
@@ -749,12 +750,12 @@ elif pagina == "Rendimiento del modelo":
         [acc, prec, rec, f1, auc]
     ):
         with col:
-            st.markdown(f"""
+            st.markdown(textwrap.dedent(f"""
             <div class='metric-card'>
                 <div class='metric-label'>{label}</div>
                 <div class='metric-value {color_class(val)}'>{val:.2f}</div>
             </div>
-            """, unsafe_allow_html=True)
+            """).strip(), unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -846,11 +847,11 @@ elif pagina == "Rendimiento del modelo":
     st.pyplot(fig, width='stretch')
     plt.close()
 
-    st.markdown("""
+    st.markdown(textwrap.dedent("""
     <div style='background:#0f1a2e; border:1px solid #1e3a5f; border-radius:10px; padding:16px 20px; font-size:13px; color:#94a3b8; line-height:1.7; margin-top:8px'>
     💡 <b style='color:#e2e8f0'>¿Cómo elegir el umbral?</b> Bajar el umbral aumenta el recall (detecta más casos positivos reales) a costa de más falsos positivos. En problemas de agua potable, clasificar incorrectamente agua <i>no potable</i> como potable es el error más costoso, por lo que se prefiere un umbral más bajo que priorice el recall.
     </div>
-    """, unsafe_allow_html=True)
+    """).strip(), unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -858,13 +859,13 @@ elif pagina == "Rendimiento del modelo":
 # ══════════════════════════════════════════════════════════════════════════════
 elif pagina == "Exploración de datos":
 
-    st.markdown("""
+    st.markdown(textwrap.dedent("""
     <div class='hero'>
         <div class='hero-tag'>Dataset · Water Potability</div>
         <div class='hero-title'>Exploración de datos</div>
         <div class='hero-sub'>Distribuciones, correlaciones y estadísticas del dataset original.</div>
     </div>
-    """, unsafe_allow_html=True)
+    """).strip(), unsafe_allow_html=True)
 
     # Estadísticas rápidas
     st.markdown("<div class='section-header'>Resumen del dataset</div>", unsafe_allow_html=True)
