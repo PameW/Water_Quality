@@ -475,16 +475,15 @@ if pagina == "Home":
     """).strip(), unsafe_allow_html=True)
 
     # ── Info cards ────────────────────────────────────────────────────────────
-    st.markdown(textwrap.dedent("""
+# ── Info cards ────────────────────────────────────────────────────────────
+    st.markdown("""
     <div class='info-grid'>
-
         <div class='info-card'>
             <div class='info-card-icon'>🗄️</div>
             <div class='info-card-title'>Dataset</div>
             <div class='info-card-item'>3,276 water samples</div>
             <div class='info-card-item'>9 physicochemical features</div>
         </div>
-
         <div class='info-card'>
             <div class='info-card-icon'>🤖</div>
             <div class='info-card-title'>Model</div>
@@ -492,7 +491,6 @@ if pagina == "Home":
             <div class='info-card-item'>GridSearchCV</div>
             <div class='info-card-item'>Threshold Optimization</div>
         </div>
-
         <div class='info-card'>
             <div class='info-card-icon'>📈</div>
             <div class='info-card-title'>Performance</div>
@@ -500,23 +498,13 @@ if pagina == "Home":
             <div class='info-card-item'>Recall: 0.63</div>
             <div class='info-card-item'>ROC-AUC: 0.67</div>
         </div>
-
         <div class='info-card'>
             <div class='info-card-icon'>🔬</div>
             <div class='info-card-title'>Features Analyzed</div>
-            <div class='info-card-item'>pH</div>
-            <div class='info-card-item'>Hardness</div>
-            <div class='info-card-item'>Sulfate</div>
-            <div class='info-card-item'>Chloramines</div>
-            <div class='info-card-item'>Solids</div>
-            <div class='info-card-item'>Conductivity</div>
-            <div class='info-card-item'>Organic Carbon</div>
-            <div class='info-card-item'>Trihalomethanes</div>
-            <div class='info-card-item'>Turbidity</div>
+            <div class='info-card-item'>pH, Hardness, Sulfate, Chloramines, Solids, Conductivity, Organic Carbon, Trihalomethanes, Turbidity</div>
         </div>
-
     </div>
-    """).strip(), unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
     # ── Secciones con botones ─────────────────────────────────────────────────
     st.markdown("<div class='section-header'>Secciones</div>", unsafe_allow_html=True)
