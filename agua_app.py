@@ -757,7 +757,7 @@ elif pagina == "Rendimiento del modelo":
         style_fig(fig, ax)
         sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax,
                     linewidths=0.5, linecolor=BORDER,
-                    annot_kws={"size": 16, "weight": "bold", "color": TEXT_MAIN},
+                    annot_kws={"size": 16, "weight": "bold", "color": TEXT_MAIN, "path_effects": [plt.matplotlib.patheffects.withStroke(linewidth=2, foreground="black")]},
                     cbar=False)
         ax.set_xlabel("Predicción", color=TEXT_MUTED, fontsize=11)
         ax.set_ylabel("Valor real", color=TEXT_MUTED, fontsize=11)
