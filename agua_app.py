@@ -314,7 +314,6 @@ div[data-testid="stButton"] > button {
 div[data-testid="stButton"] > button:hover {
     opacity: 0.88 !important;
 }
-}
 .var-name {
     font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
